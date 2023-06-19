@@ -1,2 +1,2 @@
 # lowcode_editor
-Example of lowcode editor based on react-flow library
+Example of lowcode editor based on reactflow library
