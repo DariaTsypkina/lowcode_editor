@@ -1,0 +1,23 @@
+.btn {
+  display: flex;
+  padding: 2px;
+  margin: 0;
+  border: none;
+  background: none;
+  border-radius: 4px;
+  transition: all 0.4s;
+}
+
+.btn:not(:disabled) {
+  cursor: pointer;
+  pointer-events: all;
+}
+
+.btn_white {
+  background-color: #fff;
+}
+
+.btn_white:hover {
+  color: #fff;
+  background-color: #000000;
+}

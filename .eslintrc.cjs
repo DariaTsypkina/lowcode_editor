@@ -4,9 +4,9 @@ module.exports = {
     es2021: true
   },
   extends: [
+    "eslint:recommended",
     "plugin:react/recommended",
     "standard-with-typescript",
-    "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react-hooks/recommended"
   ],
@@ -14,7 +14,6 @@ module.exports = {
   overrides: [
     {
       files: ["*.ts", "*.tsx"],
-
       parserOptions: {
         project: ["./tsconfig.json"]
       }
