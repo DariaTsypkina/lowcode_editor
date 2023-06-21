@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 import Icon from "@mdi/react";
 import { mdiPlus } from "@mdi/js";
-import ReactFlow, { Background, useNodesState, useEdgesState, addEdge, type Edge, type Connection, Controls, Panel, NodeResizer, NodeToolbar, type Node } from "reactflow";
+import ReactFlow, { Background, useNodesState, useEdgesState, addEdge, type Edge, type Connection, Controls, Panel, NodeResizer, NodeToolbar, type Node, type NodeTypes } from "reactflow";
 
 import "./App.css";
 import "reactflow/dist/style.css";
@@ -18,7 +18,7 @@ const initialEdges: Edge[] = [
   { id: "e1-2", source: "1", target: "2" }
 ];
 
-const nodeTypes = {
+const nodeTypes: NodeTypes = {
   initialNode: InitialNode
 };
 
@@ -32,7 +32,7 @@ export const App = () => {
 
   const onConnect = useCallback((params: Edge | Connection) => { setEdges((eds) => addEdge(params, eds)); }, [setEdges]);
 
-  const handleAddNode = useCallback((e: React.MouseEvent<Element, MouseEvent>) => {
+  const handleAddNode = useCallback(() => {
     const lastNode = nodes[nodes.length - 1];
     const lastId = lastNode?.id || "0";
     const id = `${+lastId + 1}`;
