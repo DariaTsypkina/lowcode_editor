@@ -1,22 +1,34 @@
 import { useCallback, useEffect } from "react";
-import Icon from "@mdi/react";
+
 import { mdiPlus } from "@mdi/js";
-import ReactFlow, { Background, useNodesState, useEdgesState, addEdge, type Edge, type Connection, Controls, Panel, NodeResizer, NodeToolbar, type Node, type NodeTypes } from "reactflow";
+import Icon from "@mdi/react";
+import ReactFlow, {
+  Background,
+  type Connection,
+  Controls,
+  type Edge,
+  type Node,
+  NodeResizer,
+  NodeToolbar,
+  type NodeTypes,
+  Panel,
+  addEdge,
+  useEdgesState,
+  useNodesState
+} from "reactflow";
+
+import { Button } from "./components/Button/Button";
+import { InitialNode } from "./components/Nodes/InitialNode/InitialNode";
 
 import "./App.css";
 import "reactflow/dist/style.css";
-
-import { Button } from "components/Button/Button";
-import { InitialNode } from "./components/Nodes/InitialNode/InitialNode";
 
 const initialNodes: Node[] = [
   { id: "1", position: { x: 500, y: 100 }, data: { label: "1" } },
   { id: "2", position: { x: 500, y: 200 }, data: { label: "2" } }
 ];
 
-const initialEdges: Edge[] = [
-  { id: "e1-2", source: "1", target: "2" }
-];
+const initialEdges: Edge[] = [{ id: "e1-2", source: "1", target: "2" }];
 
 const nodeTypes: NodeTypes = {
   initialNode: InitialNode
@@ -30,7 +42,12 @@ export const App = () => {
     (document.querySelector("a") as HTMLElement).style.display = "none";
   }, []);
 
-  const onConnect = useCallback((params: Edge | Connection) => { setEdges((eds) => addEdge(params, eds)); }, [setEdges]);
+  const onConnect = useCallback(
+    (params: Edge | Connection) => {
+      setEdges((eds) => addEdge(params, eds));
+    },
+    [setEdges]
+  );
 
   const handleAddNode = useCallback(() => {
     const lastNode = nodes[nodes.length - 1];
@@ -48,7 +65,7 @@ export const App = () => {
       }
     };
 
-    setNodes(state => [...state, newNode]);
+    setNodes((state) => [...state, newNode]);
   }, [nodes, setNodes]);
 
   return (

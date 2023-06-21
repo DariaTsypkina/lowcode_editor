@@ -23,10 +23,7 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module"
   },
-  plugins: [
-    "react",
-    "@typescript-eslint"
-  ],
+  plugins: ["react", "@typescript-eslint"],
   root: true,
   rules: {
     quotes: ["error", "double"],
@@ -35,6 +32,7 @@ module.exports = {
     "@typescript-eslint/quotes": ["error", "double"],
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/strict-boolean-expressions": "off"
+    "@typescript-eslint/strict-boolean-expressions": "off",
+    "@typescript-eslint/member-delimiter-style": "off"
   }
 };
