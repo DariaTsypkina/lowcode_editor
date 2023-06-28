@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { type HTMLAttributes, useState } from "react";
 
 import { CreateContextMenu } from "../CreateContextMenu/CreateContextMenu";
 import { StyledContextMenu } from "./ContextMenu.styles";
 import { createPortal } from "react-dom";
 
-interface ContextMenuProps {
+interface ContextMenuProps extends HTMLAttributes<HTMLDivElement> {
   isOpened: boolean;
   position: {
     x: number;
@@ -12,14 +12,15 @@ interface ContextMenuProps {
   };
 }
 
-export const ContextMenu = ({ isOpened, position }: ContextMenuProps) => {
+export const ContextMenu = ({ isOpened, position, ...props }: ContextMenuProps) => {
   const [isCreateContextMenuOpened, setIsCreateContextMenuOpened] = useState(false);
 
   if (!isOpened) {
     return null;
   }
+
   return createPortal(
-    <StyledContextMenu position={position}>
+    <StyledContextMenu {...props} position={position}>
       <ul>
         <li>
           <button
@@ -47,7 +48,12 @@ export const ContextMenu = ({ isOpened, position }: ContextMenuProps) => {
         </li>
       </ul>
 
-      <CreateContextMenu isOpened={isCreateContextMenuOpened} />
+      <CreateContextMenu
+        isOpened={isCreateContextMenuOpened}
+        onMouseLeave={() => {
+          setIsCreateContextMenuOpened(false);
+        }}
+      />
     </StyledContextMenu>,
     document.body
   );

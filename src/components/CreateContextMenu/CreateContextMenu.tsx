@@ -15,36 +15,36 @@ interface CreateContextMenuProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const CreateContextMenu = (props: CreateContextMenuProps) => {
-  const { isOpened } = props;
+  const { isOpened, onEnd, onStart, onScript, onMessage, onCondition, onCustomInput, ...otherProps } = props;
 
   if (!isOpened) {
     return null;
   }
 
   return (
-    <StyledCreateContextMenu>
+    <StyledCreateContextMenu {...otherProps}>
       <ul>
         <li>
-          <button data-nodetype="initialNode" onClick={props.onStart}>
+          <button data-nodetype="initialNode" onClick={onStart}>
             start
           </button>
         </li>
         <li>
-          <button onClick={props.onMessage}>message</button>
+          <button onClick={onMessage}>message</button>
         </li>
         <li>
-          <button data-nodetype="customInput" onClick={props.onCustomInput}>
+          <button data-nodetype="customInput" onClick={onCustomInput}>
             custom input
           </button>
         </li>
         <li>
-          <button onClick={props.onCondition}>condition</button>
+          <button onClick={onCondition}>condition</button>
         </li>
         <li>
-          <button onClick={props.onScript}>script</button>
+          <button onClick={onScript}>script</button>
         </li>
         <li>
-          <button onClick={props.onEnd}>end</button>
+          <button onClick={onEnd}>end</button>
         </li>
       </ul>
     </StyledCreateContextMenu>
