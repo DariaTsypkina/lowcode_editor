@@ -98,18 +98,14 @@ export const CustomInput = (props: NodeProps) => {
     }));
   }, []);
 
-  const handleSetOptionType = useCallback(
-    (e: FormEvent<HTMLInputElement>) => {
-      const variant = e.currentTarget.value as ExitVariant;
-      const id = options.at(-1)?.id ?? "1";
-      setNewOption((option) => ({
-        ...option,
-        id,
-        variant
-      }));
-    },
-    [options]
-  );
+  const handleSetOptionType = useCallback((e: FormEvent<HTMLInputElement>) => {
+    const variant = e.currentTarget.value as ExitVariant;
+
+    setNewOption((option) => ({
+      ...option,
+      variant
+    }));
+  }, []);
 
   const handleSubmit = useCallback(
     (e: FormEvent) => {
@@ -117,11 +113,16 @@ export const CustomInput = (props: NodeProps) => {
 
       if (!newOption.value) return;
 
+      setNewOption((option) => ({
+        ...option,
+        id: `${options.length + 1}`
+      }));
+
       setOptions((opts) => [...opts, newOption]);
 
       setIsInputOpened(false);
     },
-    [newOption]
+    [newOption, options.length]
   );
 
   return (
@@ -130,19 +131,19 @@ export const CustomInput = (props: NodeProps) => {
 
       <StyledTitle>
         <Icon path={mdiCommentQuote} size={0.75} />
-        <span>CustomInput</span>
+        <span>Custom Input {id}</span>
       </StyledTitle>
 
       <StyledSubtitle>Options</StyledSubtitle>
 
       <StyledOptionsList>
         {options.sort(sortByVariant).map((option, idx) => (
-          <li key={idx} style={{ position: "relative" }}>
+          <li key={idx}>
             {option.value}
             <ExitHandle
               variant={option.variant}
               type="source"
-              id={`exit_${option.variant}_${idx}`}
+              id={`input_${id}_exit_${option.variant}_${option.id}`}
               position={Position.Right}
             />
           </li>

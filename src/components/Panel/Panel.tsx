@@ -5,45 +5,12 @@ import { CreateContextMenu } from "../CreateContextMenu/CreateContextMenu";
 import { StyledButtons, StyledPanel } from "./Panel.styles";
 import { mdiPlus, mdiTrayArrowDown } from "@mdi/js";
 import Icon from "@mdi/react";
-import { type Node, type ReactFlowJsonObject, useReactFlow } from "reactflow";
+import { type ReactFlowJsonObject, useReactFlow } from "reactflow";
 
 export const Panel = () => {
   const [isCreateContextMenuOpened, setIsCreateContextMenuOpened] = useState(false);
 
-  const { setNodes, setEdges, setViewport, toObject, getNodes } = useReactFlow();
-
-  const handleAddNode = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      const { nodetype } = e.currentTarget.dataset;
-
-      const nodes = getNodes();
-
-      if (nodes.some(({ type }) => type === "initialNode") && nodetype === "initiaNode") {
-        return;
-      }
-
-      const lastNode = nodes[nodes.length - 1];
-      const lastId = lastNode?.id || "0";
-      const id = `${+lastId + 1}`;
-
-      const newNode: Node = {
-        id,
-        position: {
-          x: id === "1" ? 500 : lastNode?.position.x,
-          y: id === "1" ? 150 : lastNode?.position.y + 150
-        },
-        data: {
-          value: nodetype === "initialNode" ? "Initial Node" : ""
-        },
-        type: nodetype
-      };
-
-      setNodes((state) => [...state, newNode]);
-
-      setIsCreateContextMenuOpened(false);
-    },
-    [getNodes, setNodes]
-  );
+  const { setNodes, setEdges, setViewport, toObject } = useReactFlow();
 
   const onSave = useCallback(() => {
     const flow = toObject();
@@ -85,8 +52,6 @@ export const Panel = () => {
 
       <CreateContextMenu
         isOpened={isCreateContextMenuOpened}
-        onStart={handleAddNode}
-        onCustomInput={handleAddNode}
         onMouseLeave={() => {
           setIsCreateContextMenuOpened(false);
         }}
