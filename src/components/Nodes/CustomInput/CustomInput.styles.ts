@@ -7,8 +7,30 @@ export const StyledCustomInput = styled.div<{ selected?: boolean }>`
   background-color: white;
 `;
 
+export const StyledTitle = styled.p`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  color: #0c595f;
+  border-radius: 0.5rem;
+  background-color: #b7f8ff;
+  font-weight: bold;
+  font-size: 0.825rem;
+`;
+
+export const StyledSubtitle = styled.p`
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  color: #808080;
+`;
+
 export const StyledOptionsList = styled.ul`
-  & > li:not(:first-child) {
-    margin-top: 0.5rem;
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  & > li {
+    &:not(:first-child) {
+      margin-top: 0.75rem;
+    }
   }
 `;

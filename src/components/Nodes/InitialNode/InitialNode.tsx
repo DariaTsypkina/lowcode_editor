@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { type FormEvent, useCallback, useEffect, useRef, useState } from "react";
 
 import { NodeContextMenu } from "../NodeContextMenu/NodeContextMenu";
 import { StyledContainer, StyledNode } from "./InitialNode.styles";
@@ -19,7 +19,7 @@ export const InitialNode = (props: NodeProps) => {
 
   const [nodeName, setNodeName] = useState(data.value);
 
-  const handleChange = useCallback((e: React.FormEvent<HTMLInputElement>) => {
+  const handleChange = useCallback((e: FormEvent<HTMLInputElement>) => {
     setNodeName(e.currentTarget.value);
   }, []);
 
