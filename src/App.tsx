@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { mdiPlus } from "@mdi/js";
+import { nodeTypes } from "./types/nodeTypes";
+import { mdiPlus, mdiTrayArrowDown } from "@mdi/js";
 import Icon from "@mdi/react";
 import ReactFlow, {
   Background,
@@ -10,8 +11,8 @@ import ReactFlow, {
   type Node,
   NodeResizer,
   NodeToolbar,
-  type NodeTypes,
   Panel,
+  type ReactFlowInstance,
   addEdge,
   useEdgesState,
   useNodesState
@@ -20,29 +21,12 @@ import ReactFlow, {
 import { Button } from "./components/Button/Button";
 import { ContextMenu } from "./components/ContextMenu/ContextMenu";
 import { CreateContextMenu } from "./components/CreateContextMenu/CreateContextMenu";
-import { CustomInput } from "./components/Nodes/CustomInput/CustomInput";
-import { InitialNode } from "./components/Nodes/InitialNode/InitialNode";
 
-import "./App.css";
 import "reactflow/dist/style.css";
 
-const nodeTypes: NodeTypes = {
-  initialNode: InitialNode,
-  customInput: CustomInput
-};
-
-const initialNodes: Node[] = [
-  // { id: "1", position: { x: 500, y: 200 }, data: { value: "Initial Node" }, type: "initialNode" }
-  // { id: "2", position: { x: 500, y: 200 }, data: { label: "2" } }
-];
-
-const initialEdges: Edge[] = [
-  // { id: "e1-2", source: "1", target: "2" }
-];
-
 export const App = () => {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   const [isCreateContextMenuOpened, setIsCreateContextMenuOpened] = useState(false);
 
@@ -52,7 +36,7 @@ export const App = () => {
 
   const onConnect = useCallback(
     (params: Edge | Connection) => {
-      setEdges((eds) => addEdge(params, eds));
+      setEdges((eds) => addEdge({ ...params, type: "smoothstep" }, eds));
     },
     [setEdges]
   );
@@ -97,9 +81,35 @@ export const App = () => {
     setContextMenuIsOpened(true);
   };
 
+  const [rfInstance, setRfInstance] = useState<ReactFlowInstance | null>(null);
+
+  const onSave = useCallback(() => {
+    if (rfInstance) {
+      const flow = rfInstance.toObject();
+      localStorage.setItem("react-flow-example", JSON.stringify(flow));
+      console.log(flow);
+    }
+  }, [rfInstance]);
+
+  const onRestore = useCallback(() => {
+    const restoreFlow = async () => {
+      const flow = JSON.parse(localStorage.getItem("react-flow-example") ?? "");
+
+      if (flow) {
+        const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+        setNodes(flow.nodes || []);
+        setEdges(flow.edges || []);
+        rfInstance?.setViewport({ x, y, zoom });
+      }
+    };
+
+    restoreFlow().catch(console.error);
+  }, [rfInstance, setEdges, setNodes]);
+
   return (
     <div className="app">
       <ReactFlow
+        onInit={setRfInstance}
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
@@ -109,19 +119,31 @@ export const App = () => {
         style={{ backgroundColor: "#d3d2e5" }}
         onPaneContextMenu={handleOnPaneContextMenu}
         onClick={() => {
-          // setContextMenuIsOpened(false);
+          setContextMenuIsOpened(false);
         }}
       >
         <NodeToolbar />
         <NodeResizer />
         <Panel position="top-right" style={{ width: "100%", backgroundColor: "#efe692", margin: 0, padding: "10px" }}>
-          <Button
-            onClick={() => {
-              setIsCreateContextMenuOpened(true);
+          <div
+            style={{
+              display: "flex",
+              gap: "0.5rem"
             }}
           >
-            <Icon path={mdiPlus} size={1} />
-          </Button>
+            <Button
+              onClick={() => {
+                setIsCreateContextMenuOpened(true);
+              }}
+            >
+              <Icon path={mdiPlus} size={1} />
+            </Button>
+            <Button onClick={onSave}>
+              <Icon path={mdiTrayArrowDown} size={1} />
+            </Button>
+
+            <Button onClick={onRestore}>Restore</Button>
+          </div>
 
           <CreateContextMenu
             isOpened={isCreateContextMenuOpened}

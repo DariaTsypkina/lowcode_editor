@@ -1,9 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { StyledButton, StyledContainer, StyledContextMenu, StyledHandle, StyledNode } from "./InitialNode.styles";
-import { mdiContentCopy, mdiLock, mdiPencil, mdiPlayOutline, mdiTrashCanOutline } from "@mdi/js";
+import { NodeContextMenu } from "../NodeContextMenu/NodeContextMenu";
+import { StyledContainer, StyledNode } from "./InitialNode.styles";
+import { mdiPlayOutline } from "@mdi/js";
 import Icon from "@mdi/react";
 import { type NodeProps, Position, useReactFlow, useStoreApi } from "reactflow";
+import { DeafultHandle } from "src/components/Handles/DeafultHandle/DeafultHandle";
+import { useDeleteNode } from "src/hooks/useDeleteNode";
 
 export const InitialNode = (props: NodeProps) => {
   const { id, selected, data } = props;
@@ -19,6 +22,15 @@ export const InitialNode = (props: NodeProps) => {
   const handleChange = useCallback((e: React.FormEvent<HTMLInputElement>) => {
     setNodeName(e.currentTarget.value);
   }, []);
+
+  const handleEdit = useCallback(() => {
+    setIsEdit(true);
+    setTimeout(() => {
+      inputRef?.current?.focus();
+    });
+  }, []);
+
+  const handleDelete = useDeleteNode();
 
   useEffect(() => {
     const { nodeInternals } = store.getState();
@@ -39,27 +51,7 @@ export const InitialNode = (props: NodeProps) => {
 
   return (
     <StyledContainer>
-      <StyledContextMenu selected={selected}>
-        <StyledButton>
-          <Icon path={mdiContentCopy} size={0.75} />
-        </StyledButton>
-        <StyledButton
-          onClick={() => {
-            setIsEdit(true);
-            setTimeout(() => {
-              inputRef?.current?.focus();
-            });
-          }}
-        >
-          <Icon path={mdiPencil} size={0.75} />
-        </StyledButton>
-        <StyledButton>
-          <Icon path={mdiLock} size={0.75} />
-        </StyledButton>
-        <StyledButton>
-          <Icon path={mdiTrashCanOutline} size={0.75} />
-        </StyledButton>
-      </StyledContextMenu>
+      <NodeContextMenu selected={selected} onEdit={handleEdit} onDelete={handleDelete} />
 
       <StyledNode>
         <Icon path={mdiPlayOutline} size={2} color="#a31cab" />
@@ -79,10 +71,10 @@ export const InitialNode = (props: NodeProps) => {
           <p>{data.value}</p>
         )}
 
-        <StyledHandle type="source" position={Position.Top} selected={selected} id="a" />
-        <StyledHandle type="source" position={Position.Right} selected={selected} id="b" />
-        <StyledHandle type="source" position={Position.Bottom} selected={selected} id="c" />
-        <StyledHandle type="source" position={Position.Left} selected={selected} id="d" />
+        <DeafultHandle type="source" position={Position.Top} selected={selected} id="a" />
+        <DeafultHandle type="source" position={Position.Right} selected={selected} id="b" />
+        <DeafultHandle type="source" position={Position.Bottom} selected={selected} id="c" />
+        <DeafultHandle type="source" position={Position.Left} selected={selected} id="d" />
       </StyledNode>
     </StyledContainer>
   );

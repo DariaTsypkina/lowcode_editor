@@ -1,23 +1,45 @@
-import { StyledCustomInput } from "./CustomInput.styles";
-import { Handle, type NodeProps, Position } from "reactflow";
+import { useState } from "react";
 
-const options = ["success", "warning", "error"];
+import { NodeContextMenu } from "../NodeContextMenu/NodeContextMenu";
+import { StyledCustomInput, StyledOptionsList } from "./CustomInput.styles";
+import { type NodeProps, Position } from "reactflow";
+import { DeafultHandle } from "src/components/Handles/DeafultHandle/DeafultHandle";
+import { ExitHandle } from "src/components/Handles/ExitHandle/ExitHandle";
+import { type ExitVariant } from "src/components/Handles/ExitHandle/ExitHandle.types";
+import { useDeleteNode } from "src/hooks/useDeleteNode";
+
+const initialOptions: ExitVariant[] = ["success", "warning", "error"];
 
 export const CustomInput = (props: NodeProps) => {
+  const { selected } = props;
+
+  const handleDelete = useDeleteNode();
+
+  const [options] = useState(initialOptions);
+
   return (
-    <StyledCustomInput>
+    <StyledCustomInput selected={selected}>
+      <NodeContextMenu selected={selected} onDelete={handleDelete} />
       <p>CustomInput</p>
 
       <p>Options</p>
 
-      <ul>
-        {options.map((option) => (
-          <li key={option} style={{ position: "relative" }}>
+      <StyledOptionsList>
+        {options.map((option, idx) => (
+          <li key={idx} style={{ position: "relative" }}>
             {option}
-            <Handle type="source" position={Position.Right} style={{ right: "0" }} />
+            <ExitHandle
+              variant={option}
+              type="source"
+              id={`exit_${option}_${idx}`}
+              position={Position.Right}
+              style={{ left: "calc(100% + 0.59rem)" }}
+            />
           </li>
         ))}
-      </ul>
+      </StyledOptionsList>
+
+      <DeafultHandle selected type="target" position={Position.Top} />
     </StyledCustomInput>
   );
 };

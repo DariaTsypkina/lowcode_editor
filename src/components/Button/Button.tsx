@@ -1,17 +1,17 @@
 import { type ButtonHTMLAttributes, type ReactNode } from "react";
 
-import "./Button.css";
+import { StyledButton } from "./Button.styles";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children?: ReactNode;
-  color?: "white";
+  variant?: "white";
 }
 
 export const Button = (props: ButtonProps) => {
-  const { children, color = "white", ...otherProps } = props;
+  const { children, variant = "white", ...otherProps } = props;
   return (
-    <button {...otherProps} className={`btn btn_${color}`}>
+    <StyledButton {...otherProps} variant={variant}>
       {children}
-    </button>
+    </StyledButton>
   );
 };
