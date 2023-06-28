@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
-export const StyledCustomInput = styled.div<{ selected?: boolean }>`
+export const StyledCustomInput = styled.div<{ selected?: boolean; isValid?: boolean }>`
   padding: 0.5rem;
-  border: 1px solid ${({ selected }) => (selected ? "#1c1c1c  " : "transparent")};
+  border: 1.5px solid ${({ selected, isValid }) => (selected ? "#1c1c1c" : !isValid ? "red" : "transparent")};
   border-radius: 0.5rem;
   background-color: white;
 `;

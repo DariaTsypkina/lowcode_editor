@@ -1,7 +1,7 @@
 import { type HTMLAttributes, useCallback } from "react";
 
 import { StyledCreateContextMenu } from "./CreateContextMenu.styles";
-import { type Node, useReactFlow } from "reactflow";
+import { type Node, useNodes, useReactFlow } from "reactflow";
 
 interface CreateContextMenuProps extends HTMLAttributes<HTMLDivElement> {
   isOpened: boolean;
@@ -10,13 +10,12 @@ interface CreateContextMenuProps extends HTMLAttributes<HTMLDivElement> {
 export const CreateContextMenu = (props: CreateContextMenuProps) => {
   const { isOpened, ...otherProps } = props;
 
-  const { setNodes, getNodes } = useReactFlow();
+  const { setNodes } = useReactFlow();
+  const nodes = useNodes();
 
   const handleAddNode = useCallback(
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       const { nodetype } = e.currentTarget.dataset;
-
-      const nodes = getNodes();
 
       if (nodes.some(({ type }) => type === "initialNode") && nodetype === "initiaNode") {
         return;
@@ -40,7 +39,7 @@ export const CreateContextMenu = (props: CreateContextMenuProps) => {
 
       setNodes((state) => [...state, newNode]);
     },
-    [getNodes, setNodes]
+    [nodes, setNodes]
   );
 
   if (!isOpened) {

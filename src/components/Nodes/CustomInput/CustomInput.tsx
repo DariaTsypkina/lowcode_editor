@@ -4,7 +4,7 @@ import { NodeContextMenu } from "../NodeContextMenu/NodeContextMenu";
 import { StyledCustomInput, StyledOptionsList, StyledSubtitle, StyledTitle } from "./CustomInput.styles";
 import { mdiCommentQuote } from "@mdi/js";
 import Icon from "@mdi/react";
-import { type NodeProps, Position, useReactFlow, useStoreApi } from "reactflow";
+import { type NodeProps, Position, getConnectedEdges, useEdges, useReactFlow, useStoreApi } from "reactflow";
 import { DeafultHandle } from "src/components/Handles/DeafultHandle/DeafultHandle";
 import { ExitHandle } from "src/components/Handles/ExitHandle/ExitHandle";
 import { type ExitVariant } from "src/components/Handles/ExitHandle/ExitHandle.types";
@@ -44,7 +44,8 @@ const initialOption: Option = {
 export const CustomInput = (props: NodeProps) => {
   const { id, selected, data } = props;
 
-  const { setNodes } = useReactFlow();
+  const { setNodes, getNode } = useReactFlow();
+  const edges = useEdges();
   const store = useStoreApi();
 
   const handleDelete = useDeleteNode();
@@ -55,7 +56,16 @@ export const CustomInput = (props: NodeProps) => {
 
   const [isInputOpened, setIsInputOpened] = useState(false);
 
+  const [isValid, setIsValid] = useState(true);
+
   const ref = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const thisNode = getNode(id);
+    if (!thisNode) return;
+    const connectedEdges = getConnectedEdges([thisNode], edges);
+    setIsValid(!!connectedEdges.length);
+  }, [edges, getNode, id]);
 
   useEffect(() => {
     !isInputOpened &&
@@ -126,7 +136,7 @@ export const CustomInput = (props: NodeProps) => {
   );
 
   return (
-    <StyledCustomInput selected={selected}>
+    <StyledCustomInput selected={selected} isValid={isValid}>
       <NodeContextMenu selected={selected} onDelete={handleDelete} onEdit={handleShowInput} />
 
       <StyledTitle>
