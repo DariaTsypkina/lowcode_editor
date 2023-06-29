@@ -1,4 +1,4 @@
-import { type FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import { type FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { NodeContextMenu } from "../NodeContextMenu/NodeContextMenu";
 import { StyledCustomInput, StyledOptionsList, StyledSubtitle, StyledTitle } from "./CustomInput.styles";
@@ -58,7 +58,16 @@ export const CustomInput = (props: NodeProps) => {
 
   const [isValid, setIsValid] = useState(true);
 
+  const [isHovered, setIsHovered] = useState(false);
+
   const ref = useRef<HTMLInputElement>(null);
+
+  const connectedIds = useMemo(() => {
+    const thisNode = getNode(id);
+    if (!thisNode) return [];
+    const connectedEdges = getConnectedEdges([thisNode], edges);
+    return connectedEdges.filter(({ source }) => source === id).map(({ sourceHandle }) => sourceHandle);
+  }, [edges, getNode, id]);
 
   useEffect(() => {
     const thisNode = getNode(id);
@@ -136,7 +145,16 @@ export const CustomInput = (props: NodeProps) => {
   );
 
   return (
-    <StyledCustomInput selected={selected} isValid={isValid}>
+    <StyledCustomInput
+      selected={selected}
+      isValid={isValid}
+      onMouseOver={() => {
+        setIsHovered(true);
+      }}
+      onMouseLeave={() => {
+        setIsHovered(false);
+      }}
+    >
       <NodeContextMenu selected={selected} onDelete={handleDelete} onEdit={handleShowInput} />
 
       <StyledTitle>
@@ -152,9 +170,10 @@ export const CustomInput = (props: NodeProps) => {
             {option.value}
             <ExitHandle
               variant={option.variant}
-              type="source"
               id={`input_${id}_exit_${option.variant}_${option.id}`}
+              type="source"
               position={Position.Right}
+              $noConnection={isHovered && !connectedIds.includes(`input_${id}_exit_${option.variant}_${option.id}`)}
             />
           </li>
         ))}

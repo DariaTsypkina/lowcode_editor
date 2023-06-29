@@ -4,7 +4,7 @@ export const StyledCustomInput = styled.div<{ selected?: boolean; isValid?: bool
   padding: 0.5rem;
   border: 1.5px solid ${({ selected, isValid }) => (selected ? "#1c1c1c" : !isValid ? "red" : "transparent")};
   border-radius: 0.5rem;
-  background-color: white;
+  background-color: ${({ isValid }) => (!isValid ? "#ffe2e2" : "#fff")};
 `;
 
 export const StyledTitle = styled.p`
