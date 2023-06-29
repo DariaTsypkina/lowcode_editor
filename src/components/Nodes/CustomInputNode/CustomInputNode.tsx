@@ -1,7 +1,7 @@
 import { type FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { NodeContextMenu } from "../NodeContextMenu/NodeContextMenu";
-import { StyledCustomInput, StyledOptionsList, StyledSubtitle, StyledTitle } from "./CustomInput.styles";
+import { StyledCustomInputNode, StyledOptionsList, StyledSubtitle, StyledTitle } from "./CustomInputNode.styles";
 import { mdiCommentQuote } from "@mdi/js";
 import Icon from "@mdi/react";
 import { type NodeProps, Position, getConnectedEdges, useEdges, useReactFlow, useStoreApi } from "reactflow";
@@ -41,7 +41,7 @@ const initialOption: Option = {
   value: ""
 };
 
-export const CustomInput = (props: NodeProps) => {
+export const CustomInputNode = (props: NodeProps) => {
   const { id, selected, data } = props;
 
   const { setNodes, getNode } = useReactFlow();
@@ -66,6 +66,7 @@ export const CustomInput = (props: NodeProps) => {
     const thisNode = getNode(id);
     if (!thisNode) return [];
     const connectedEdges = getConnectedEdges([thisNode], edges);
+
     return connectedEdges.filter(({ source }) => source === id).map(({ sourceHandle }) => sourceHandle);
   }, [edges, getNode, id]);
 
@@ -145,9 +146,10 @@ export const CustomInput = (props: NodeProps) => {
   );
 
   return (
-    <StyledCustomInput
+    <StyledCustomInputNode
       selected={selected}
       isValid={isValid}
+      isHovered={isHovered}
       onMouseOver={() => {
         setIsHovered(true);
       }}
@@ -198,7 +200,7 @@ export const CustomInput = (props: NodeProps) => {
         </form>
       )}
 
-      <DeafultHandle selected type="target" position={Position.Top} />
-    </StyledCustomInput>
+      <DeafultHandle selected type="target" position={Position.Top} id={`${id}_a`} />
+    </StyledCustomInputNode>
   );
 };

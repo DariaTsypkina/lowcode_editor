@@ -17,7 +17,7 @@ export const CreateContextMenu = (props: CreateContextMenuProps) => {
     (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       const { nodetype } = e.currentTarget.dataset;
 
-      if (nodes.some(({ type }) => type === "initialNode") && nodetype === "initiaNode") {
+      if (!nodetype || (nodes.some(({ type }) => type === "initialNode") && nodetype === "initiaNode")) {
         return;
       }
 
@@ -55,10 +55,12 @@ export const CreateContextMenu = (props: CreateContextMenuProps) => {
           </button>
         </li>
         <li>
-          <button onClick={handleAddNode}>message</button>
+          <button data-nodetype="messageNode" onClick={handleAddNode}>
+            message
+          </button>
         </li>
         <li>
-          <button data-nodetype="customInput" onClick={handleAddNode}>
+          <button data-nodetype="customInputNode" onClick={handleAddNode}>
             custom input
           </button>
         </li>

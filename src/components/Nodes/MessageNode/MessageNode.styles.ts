@@ -1,10 +1,16 @@
 import styled from "styled-components";
 
-export const StyledCustomInput = styled.div<{ selected?: boolean; isValid?: boolean }>`
+export const StyledMessageNode = styled.div<{ selected?: boolean; isValid?: boolean; isHovered?: boolean }>`
+  max-width: 15rem;
   padding: 0.5rem;
   border: 1.5px solid ${({ selected, isValid }) => (selected ? "#1c1c1c" : !isValid ? "red" : "transparent")};
   border-radius: 0.5rem;
-  background-color: ${({ isValid }) => (!isValid ? "#ffe2e2" : "#fff")};
+  background-color: ${({ isValid, isHovered }) => (!isValid && isHovered ? "#ffe2e2" : "#fff")};
+  transition: background-color 0.2s;
+
+  &:hover {
+    border-color: #1c1c1c;
+  }
 `;
 
 export const StyledTitle = styled.p`
@@ -25,13 +31,6 @@ export const StyledSubtitle = styled.p`
   color: #808080;
 `;
 
-export const StyledOptionsList = styled.ul`
-  margin-top: 0.75rem;
-  font-size: 0.75rem;
-  & > li {
-    position: relative;
-    &:not(:first-child) {
-      margin-top: 0.75rem;
-    }
-  }
+export const StyledInfo = styled.p`
+  margin-top: 0.5rem;
 `;

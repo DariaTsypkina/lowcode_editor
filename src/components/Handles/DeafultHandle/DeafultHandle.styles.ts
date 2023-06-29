@@ -6,7 +6,7 @@ export const StyledDefaultHandle = styled(Handle)<{ selected?: boolean; position
   height: 0.5rem;
   border-radius: 0;
   border: none;
-  visibility: ${({ selected }) => (selected ? "visible" : "hidden")};
+  opacity: ${({ selected }) => (selected ? 1 : 0)};
   background-color: #1c1c1c;
   ${({ position }) => {
     if (position === Position.Top) {

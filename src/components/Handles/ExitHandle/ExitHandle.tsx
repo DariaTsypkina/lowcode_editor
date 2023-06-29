@@ -1,6 +1,7 @@
 import { StyledExitHandle } from "./ExitHandle.styles";
 import { type ExitVariant } from "./ExitHandle.types";
 import { type HandleProps } from "reactflow";
+import { useOnHandleHover } from "src/hooks/useOnHandleHover";
 
 type ExitHandleProps = HandleProps & {
   variant: ExitVariant;
@@ -8,5 +9,13 @@ type ExitHandleProps = HandleProps & {
 };
 
 export const ExitHandle = (props: ExitHandleProps) => {
-  return <StyledExitHandle {...props}>{props.$noConnection && "!"}</StyledExitHandle>;
+  const { id } = props;
+
+  const { handleMouseOver, handleMouseLeave } = useOnHandleHover(id);
+
+  return (
+    <StyledExitHandle {...props} onMouseOver={handleMouseOver} onMouseLeave={handleMouseLeave}>
+      {props.$noConnection && "!"}
+    </StyledExitHandle>
+  );
 };

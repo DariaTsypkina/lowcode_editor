@@ -71,10 +71,10 @@ export const InitialNode = (props: NodeProps) => {
           <p>{data.value}</p>
         )}
 
-        <DeafultHandle type="source" position={Position.Top} selected={selected} id="a" />
-        <DeafultHandle type="source" position={Position.Right} selected={selected} id="b" />
-        <DeafultHandle type="source" position={Position.Bottom} selected={selected} id="c" />
-        <DeafultHandle type="source" position={Position.Left} selected={selected} id="d" />
+        <DeafultHandle type="source" position={Position.Top} selected={selected} id={`${id}_a`} />
+        <DeafultHandle type="source" position={Position.Right} selected={selected} id={`${id}_b`} />
+        <DeafultHandle type="source" position={Position.Bottom} selected={selected} id={`${id}_c`} />
+        <DeafultHandle type="source" position={Position.Left} selected={selected} id={`${id}_d`} />
       </StyledNode>
     </StyledContainer>
   );
